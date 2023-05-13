@@ -28,7 +28,7 @@ import javax.swing.border.SoftBevelBorder;
 
 import hall.Conexion;
 
-public class menu extends javax.swing.JFrame {
+public class MenuUno extends javax.swing.JFrame {
 
     private JPanel contentPane;
 
@@ -37,7 +37,7 @@ public class menu extends javax.swing.JFrame {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    menu frame = new menu();
+                    MenuUno frame = new MenuUno();
                     frame.setVisible(true);
                 } catch (Exception e) {
                     // TODO: handle exception
@@ -48,7 +48,7 @@ public class menu extends javax.swing.JFrame {
 
     }
 
-    public menu () {
+    public MenuUno () {
         // 0 - Panel
         setResizable(false);
         setUndecorated(true);
@@ -127,6 +127,7 @@ public class menu extends javax.swing.JFrame {
 
         JButton boton_login = new JButton("");
         boton_login.setBorder(null);
+        boton_login.setContentAreaFilled(false);
         boton_login.setFont(new Font("Arial Narrow", Font.PLAIN, 18));
         boton_login.setForeground(new Color(255, 255, 255));
         boton_login.setBounds(509, 270, 67, 67);
@@ -138,6 +139,7 @@ public class menu extends javax.swing.JFrame {
                
                 Login login = new Login();
                 login.setVisible(true);
+                dispose();
                 
             }
         });
