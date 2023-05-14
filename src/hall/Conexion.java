@@ -10,7 +10,7 @@ public class Conexion {
 
         try {
             Connection cn = DriverManager.getConnection(
-                "jdbc:mysql://localhost/bd_hotel?useTimeZone=true&serverTimeZone=UTC",
+                "jdbc:mysql://localhost/bd_hotelalura?useTimeZone=true&serverTimeZone=UTC",
 				"root",
 				"Wip@8Wip@8");
 

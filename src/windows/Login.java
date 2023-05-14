@@ -35,7 +35,11 @@ public class Login extends javax.swing.JFrame {
 
     private JPanel contentPane;
     private JTextField txt_Usuario;
+    private JTextField txt_user;
     private JPasswordField txt_password;
+
+    public static String user = "";
+    String pass = "";
 
      public void main(String[] args) {
 
@@ -186,9 +190,43 @@ public class Login extends javax.swing.JFrame {
         boton_login.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-                MenuUsuario menuUsuario = new MenuUsuario();
+                user = txt_Usuario.getText().trim();
+                pass = txt_password.getText().trim();
+
+                if (!user.equals("") || !pass.equals("")) {// si usuario y contraseña son distintos espacio en blanco
+                    try {
+
+                        System.out.println("voy a conectarme");
+                        Connection cn = Conexion.conectar();
+                        PreparedStatement pst = cn.prepareStatement(
+                                "select username, password from usuarios where username = '" +
+                                        user +
+                                        "' and password = '" + pass +
+                                        "'");
+                        System.out.println("voy a ejecutar query");
+                        ResultSet rs = pst.executeQuery();
+                        System.out.println("voy a entrar al if");
+                        if (rs.next()) {
+                                new MenuUsuario().setVisible(true);
+                                dispose();
+                            } else {
+                            JOptionPane.showMessageDialog(null, "Datos de acceso incorrectos.");
+                            txt_Usuario.setText("");
+                            txt_password.setText("");
+                            }
+                         
+                    }catch (SQLException e1) {
+                        // TODO: handle exception
+                        System.err.println("Error en el boton Acceder" + e1);
+                        JOptionPane.showMessageDialog(null, "Error al iniciar sesión, contactar al administrador ");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Debes de llenar todos los campos");
+                    }
+
+                /*MenuUsuario menuUsuario = new MenuUsuario();
                 menuUsuario.setVisible(true);
-                dispose();
+                dispose();*/
             }
         });
 
