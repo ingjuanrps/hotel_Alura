@@ -36,12 +36,14 @@ import org.w3c.dom.Text;
 import hall.BotonSalir;
 import hall.Conexion;
 
+public class RegistroNuevoUsuario extends javax.swing.JFrame {
 
-public class RegistroNuevoUsuario  extends javax.swing.JFrame {
-    
     private JPanel contentPane;
-    private JTextField txt_Nombre,txt_Apellido,txt_ApellidoMa;
+    private JTextField txt_Nombre, txt_Apellido, txt_ApellidoMa, txt_Username;
     private JPasswordField txt_password;
+
+    String nombre, apellido1, apellido2, username, pass;
+    int permisos_cmb, validacion = 0;
 
     public void main(String[] args) {
 
@@ -59,7 +61,7 @@ public class RegistroNuevoUsuario  extends javax.swing.JFrame {
 
     }
 
-    public RegistroNuevoUsuario () {
+    public RegistroNuevoUsuario() {
 
         // 0 - Panel
         setResizable(false);
@@ -113,8 +115,6 @@ public class RegistroNuevoUsuario  extends javax.swing.JFrame {
                 JLabel_Logo5.getHeight(), Image.SCALE_DEFAULT));
         JLabel_Logo5.setIcon(icono_logo5);
         this.repaint();
-
-        
 
         // 6 - JLabel Usuario
         JLabel JLabel_Nombre = new JLabel("NOMBRE(S): ");
@@ -173,11 +173,30 @@ public class RegistroNuevoUsuario  extends javax.swing.JFrame {
         contentPane.add(txt_ApellidoMa);
         txt_ApellidoMa.setColumns(10);
 
+        // 6 - JLabel Usurname
+        JLabel JLabel_Username = new JLabel("USER-NAME: ");
+        JLabel_Username.setFont(new Font("Arial", Font.BOLD, 15));
+        JLabel_Username.setForeground(new Color(255, 255, 255));
+        JLabel_Username.setBounds(30, 260, 200, 20);
+        contentPane.add(JLabel_Username);
+
+        txt_Username = new JTextField();
+        txt_Username.setText("");
+        txt_Username.setBorder(new LineBorder(Color.blue, 1));
+        txt_Username.setHorizontalAlignment(SwingConstants.LEFT);
+        txt_Username.setForeground(new Color(0, 0, 255));
+        txt_Username.setBackground(new Color(255, 255, 255));
+        txt_Username.setFont(new Font("Arial", Font.PLAIN, 15));
+        txt_Username.setBounds(30, 280, 210, 20);
+        txt_Username.setEnabled(true);
+        contentPane.add(txt_Username);
+        txt_Username.setColumns(10);
+
         // 6 - Usuario
         JLabel JLabel_Passsword = new JLabel("PASSWORD: ");
         JLabel_Passsword.setFont(new Font("Arial", Font.BOLD, 15));
         JLabel_Passsword.setForeground(new Color(255, 255, 255));
-        JLabel_Passsword.setBounds(30, 260, 150, 20);
+        JLabel_Passsword.setBounds(30, 310, 150, 20);
         contentPane.add(JLabel_Passsword);
 
         txt_password = new JPasswordField();
@@ -187,14 +206,12 @@ public class RegistroNuevoUsuario  extends javax.swing.JFrame {
         txt_password.setFont(new Font("Arial", Font.PLAIN, 18));
         txt_password.setBackground(new Color(255, 255, 255));
         txt_password.setBorder(new LineBorder(Color.blue, 1));
-        txt_password.setBounds(30, 280, 210, 20);
+        txt_password.setBounds(30, 330, 210, 20);
         contentPane.add(txt_password);
-
-        
 
         // 6 - Boton Salir o cerrar
         JButton boton_salir = new JButton(" X ");
-        boton_salir.setBorder(BorderFactory.createEmptyBorder(0,0, 0, 0));
+        boton_salir.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         boton_salir.setFont(new Font("Arial Narrow", Font.BOLD, 18));
         boton_salir.setForeground(new Color(255, 255, 255));
         boton_salir.setBackground(new Color(6, 130, 247));
@@ -215,18 +232,102 @@ public class RegistroNuevoUsuario  extends javax.swing.JFrame {
 
         // 7 - Boton Registrar
         JButton boton_login = new JButton("REGISTRAR");
-        boton_login.setBorder(BorderFactory.createEmptyBorder(5,5, 5, 5));
+        boton_login.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         boton_login.setFont(new Font("Arial Narrow", Font.PLAIN, 18));
         boton_login.setForeground(new Color(255, 255, 255));
         boton_login.setBackground(new Color(93, 173, 226));
-        boton_login.setBounds(30, 350, 100, 25);
+        boton_login.setBounds(140, 370, 100, 25);
         contentPane.add(boton_login);
 
         boton_login.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-               
-                
+                nombre = txt_Nombre.getText().trim();
+                apellido1 = txt_Apellido.getText().trim();
+                apellido2 = txt_ApellidoMa.getText().trim();
+                username = txt_Username.getText().trim();
+                pass = txt_password.getText().trim();
+
+                if (nombre.equals("")) {
+                    txt_Nombre.setBackground(Color.red);
+                    validacion++;
+                }
+
+                if (apellido1.equals("")) {
+                    txt_Apellido.setBackground(Color.red);
+                    validacion++;
+                }
+
+                if (apellido2.equals("")) {
+                    txt_ApellidoMa.setBackground(Color.red);
+                    validacion++;
+                }
+
+                if (username.equals("")) {
+                    txt_Username.setBackground(Color.red);
+                    validacion++;
+                }
+
+                if (pass.equals("")) {
+                    txt_password.setBackground(Color.red);
+                    validacion++;
+                }
+
+                try {
+                    Connection cn1 = Conexion.conectar();
+                    PreparedStatement pst1 = cn1
+                            .prepareStatement("select username from usuarios where username = '" + username + "'");
+
+                    ResultSet rs = pst1.executeQuery();
+                    if (rs.next()) {
+                        txt_Username.setBackground(Color.red);
+                        JOptionPane.showMessageDialog(null, "Nomber de usuario no disponible");
+                        cn1.close();
+                    } else {
+                        cn1.close();
+                        if (validacion == 0) {
+                            try {
+                                Connection cn2 = Conexion.conectar();
+                                PreparedStatement pst2 = cn2
+                                        .prepareStatement("insert into usuarios values (?,?,?,?,?,?)");
+
+                                pst2.setInt(1, 0);
+                                pst2.setString(2, nombre);
+                                pst2.setString(3, apellido1);
+                                pst2.setString(4, apellido2);
+                                pst2.setString(5, username);
+                                pst2.setString(6, pass);
+
+                                pst2.executeUpdate();
+                                cn2.close();
+
+                                Limpiar();
+                                txt_Nombre.setBackground(Color.green);
+                                txt_Apellido.setBackground(Color.green);
+                                txt_ApellidoMa.setBackground(Color.green);
+                                txt_Username.setBackground(Color.green);
+                                txt_password.setBackground(Color.green);
+
+                                JOptionPane.showMessageDialog(null, "Registro Exitoso");
+                                Login login = new Login();
+                                login.setVisible(true);
+                                dispose();
+
+                            } catch (SQLException e2) {
+                                // TODO: handle exception
+                                System.err.println("Error en Registrar usuario." + e2);
+                                JOptionPane.showMessageDialog(null, "Error al registrar, contactar al administrador.");
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Debes de llenar todos los campos");
+                        }
+                    }
+                } catch (Exception e1) {
+                    // TODO: handle exception
+                    System.err.println("Erroren validar nombre de usuario" + e1);
+                    JOptionPane.showMessageDialog(null, "Error al comparar usuario, concata al administrador");
+                }
+
             }
         });
 
@@ -237,8 +338,8 @@ public class RegistroNuevoUsuario  extends javax.swing.JFrame {
         boton_Regresar.setContentAreaFilled(false);
         boton_Regresar.setBorder(null);
         boton_Regresar.setFont(new Font("Arial Narrow", Font.BOLD, 18));
-        
-        boton_Regresar.setBackground(new Color(255, 255, 255,1));
+
+        boton_Regresar.setBackground(new Color(255, 255, 255, 1));
         boton_Regresar.setBounds(5, 7, 22, 22);
         contentPane.add(boton_Regresar);
 
@@ -246,15 +347,12 @@ public class RegistroNuevoUsuario  extends javax.swing.JFrame {
 
             public void actionPerformed(ActionEvent e) {
 
-                
-                    Login login = new Login();
-                    login.setVisible(true);
-                    dispose();
-                
+                Login login = new Login();
+                login.setVisible(true);
+                dispose();
+
             }
         });
-
-       
 
         // 5 - Imagen azul lado Izquierdo
         JLabel JLabel_Logo3 = new JLabel("");
@@ -283,5 +381,15 @@ public class RegistroNuevoUsuario  extends javax.swing.JFrame {
 
         g.setColor(Color.WHITE);
         g.drawLine(70, 76, 288, 76);
+    }
+
+    public void Limpiar() {
+
+        txt_Nombre.setText("");
+        txt_Apellido.setText("");
+        txt_ApellidoMa.setText("");
+        txt_Username.setText("");
+        txt_password.setText("");
+
     }
 }
