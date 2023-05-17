@@ -242,7 +242,7 @@ public class RegistroReservas extends javax.swing.JFrame {
             }
         });
         // 7 - Boton Registrar
-        JButton boton_login = new JButton("REGISTRAR");
+        JButton boton_login = new JButton("CALCULAR");
         boton_login.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         boton_login.setFont(new Font("Arial Narrow", Font.PLAIN, 18));
         boton_login.setForeground(new Color(255, 255, 255));
@@ -465,7 +465,8 @@ public class RegistroReservas extends javax.swing.JFrame {
                 Valor_Total = valorTotal;
                 txt_valor.setText("$" + Valor_Total);
                 pagos_cmb = cmb_pago.getSelectedIndex() + 1;
-
+                
+                
                 if (pagos_cmb == 1) {
                     pago_string = "Tarjeta Credito";
                 } else if (pagos_cmb == 2) {
@@ -493,7 +494,7 @@ public class RegistroReservas extends javax.swing.JFrame {
 
                     
 
-                    JOptionPane.showMessageDialog(null, "Registro Exitoso");
+                   
                     
 
                 } catch (SQLException e2) {
@@ -502,7 +503,16 @@ public class RegistroReservas extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Error al registrar, contactar al administrador.");
                 }
 
-               
+                if (Valor_Total == 0 ) {
+                    JOptionPane.showMessageDialog(null, "Debes de Registrar tus fechas de ingreso y salida.");
+                    
+                }
+                if (Valor_Total < 0) {
+                    JOptionPane.showMessageDialog(null, "Favor de verivicaar tus fechas.");
+                }else {
+                    JOptionPane.showMessageDialog(null, "Calculo Realizado con Exito.");
+                    
+                }
 
             }
         });
@@ -522,6 +532,10 @@ public class RegistroReservas extends javax.swing.JFrame {
 
                 if (Valor_Total == 0 ) {
                     JOptionPane.showMessageDialog(null, "Debes de Registrar tus fechas de ingreso y salida.");
+                    
+                }
+                if (Valor_Total < 0) {
+                    JOptionPane.showMessageDialog(null, "Favor de verivicaar tus fechas.");
                 }else {
                 RegistroHuesped registroHuesped = new RegistroHuesped();
                 registroHuesped.setVisible(true);
