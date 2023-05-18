@@ -17,7 +17,7 @@ public class Conexion {
              */
 
             Connection cn = DriverManager.getConnection(
-                    "jdbc:mysql://ui5esryvwzxdg4jr:RHc7fF2KCICwF45cI9bE@buxyt7wqrbsu0umjbuux-mysql.services.clever-cloud.com:3306/buxyt7wqrbsu0umjbuuxui5esryvwzxdg4jr?useTimeZone=true&serverTimeZone=UTC",
+                    "mysql://ui5esryvwzxdg4jr:RHc7fF2KCICwF45cI9bE@buxyt7wqrbsu0umjbuux-mysql.services.clever-cloud.com:3306/buxyt7wqrbsu0umjbuuxui5esryvwzxdg4jr",
                     "ui5esryvwzxdg4jr",
                     "RHc7fF2KCICwF45cI9bE");
 
@@ -26,7 +26,7 @@ public class Conexion {
             // TODO: handle exception
             System.out.println("Error en conexión local  " + e);
         }
-
+            System.out.println("CONEXION CORRECTA");
         return (null);
     }
 }
