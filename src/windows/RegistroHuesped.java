@@ -5,15 +5,14 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.TextField;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.Year;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -23,25 +22,16 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.border.SoftBevelBorder;
-import javax.swing.JTextField;
-
-import org.w3c.dom.Text;
 
 import com.toedter.calendar.JDateChooser;
 
-import hall.BotonSalir;
 import hall.Conexion;
 
 public class RegistroHuesped extends javax.swing.JFrame {
@@ -50,13 +40,12 @@ public class RegistroHuesped extends javax.swing.JFrame {
             SegundoApellido = "", Apellidos = "", reserva1 = "", fecha_IN = "";
     int nacion_cmb, validacion = 0, Valor_Total = 0, Reserva_idUsuario, Reserva_idReserva, reserva = 0;
 
-    private JComboBox cmb_equipo, cmb_Nacionalidad;
+    private JComboBox cmb_Nacionalidad;
 
     JDateChooser dateChooser3;
 
     private JPanel contentPane;
     private JTextField txt_Nombre, txt_Apellido, txt_Telefono, txt_NoReserva;
-    private JPasswordField txt_password;
 
     public void main(String[] args) {
 
@@ -88,43 +77,45 @@ public class RegistroHuesped extends javax.swing.JFrame {
             setLocationRelativeTo(null);
             setContentPane(contentPane);
             contentPane.setLayout(null);
-        }
-        try {
-            Connection cn5 = Conexion.conectar();
-            PreparedStatement pst5 = cn5.prepareStatement(
-                    "select id_usuario, id_reserva from reservas where id_reserva = id_reserva");
 
-            ResultSet rs5 = pst5.executeQuery();
-            while (rs5.next()) {
-                Reserva_idUsuario = rs5.getInt("id_usuario");
-                Reserva_idReserva = rs5.getInt("id_reserva");
+            try {
+                Connection cn5 = Conexion.conectar();
+                PreparedStatement pst5 = cn5.prepareStatement(
+                        "select id_usuario, id_reserva from reservas where id_reserva = id_reserva");
+
+                ResultSet rs5 = pst5.executeQuery();
+                while (rs5.next()) {
+                    Reserva_idUsuario = rs5.getInt("id_usuario");
+                    Reserva_idReserva = rs5.getInt("id_reserva");
+                }
+                cn5.close();
+            } catch (Exception e5) {
+                // TODO: handle exception
+                System.err.println("Error al obtener ids de reservas." + e5);
             }
-            cn5.close();
-        } catch (Exception e5) {
-            // TODO: handle exception
-            System.err.println("Error al obtener ids de reservas." + e5);
-        }
 
-        try {
-            Connection cn4 = Conexion.conectar();
-            PreparedStatement pst = cn4.prepareStatement(
-                    "select nombre_usuario, primer_apellido, segundo_apellido from usuarios where username = '"
-                            + user + "'");
+            try {
+                Connection cn4 = Conexion.conectar();
+                PreparedStatement pst = cn4.prepareStatement(
+                        "select nombre_usuario, primer_apellido, segundo_apellido from usuarios where username = '"
+                                + user + "'");
 
-            ResultSet rs = pst.executeQuery();
-            while (rs.next()) {
-                nombre_Usuario = rs.getString("nombre_usuario");
-                PrimerApellido = rs.getString("primer_apellido");
-                SegundoApellido = rs.getString("segundo_apellido");
+                ResultSet rs = pst.executeQuery();
+                while (rs.next()) {
+                    nombre_Usuario = rs.getString("nombre_usuario");
+                    PrimerApellido = rs.getString("primer_apellido");
+                    SegundoApellido = rs.getString("segundo_apellido");
 
-                System.out.println("El Id es: " + nombre_Usuario);
+                    System.out.println("El Id es: " + nombre_Usuario);
+                }
+                cn4.close();
+            } catch (Exception e4) {
+                // TODO: handle exception
+                System.err.println("Error al obtenre datos de usuario." + e4);
             }
-            cn4.close();
-        } catch (Exception e4) {
-            // TODO: handle exception
-            System.err.println("Error al obtenre datos de usuario." + e4);
+            Apellidos = PrimerApellido + " " + SegundoApellido + ".";
+
         }
-        Apellidos = PrimerApellido + " " + SegundoApellido + ".";
 
         // 1- IMAGEN DE USUARIO REGISTRANDOSE
         {
@@ -150,7 +141,7 @@ public class RegistroHuesped extends javax.swing.JFrame {
             this.repaint();
         }
 
-        // 3 - Titulo REGISTRO DE HUESPED
+        // 3 - TITULO REGISTRO DE HUESPED
         {
             JLabel JLabel_nombreUsuario = new JLabel("REGISTRO DE HUESPED");
             JLabel_nombreUsuario.setFont(new Font("Arial", Font.BOLD, 18));
@@ -177,7 +168,7 @@ public class RegistroHuesped extends javax.swing.JFrame {
             this.repaint();
         }
 
-        // 10 - NOMBRE(S)
+        // 5 - NOMBRE(S)
         {
             JLabel JLabel_Nombre = new JLabel("NOMBRE(S): ");
             JLabel_Nombre.setFont(new Font("Arial", Font.BOLD, 14));
@@ -198,7 +189,7 @@ public class RegistroHuesped extends javax.swing.JFrame {
             txt_Nombre.setColumns(10);
         }
 
-        // 11 - APELLIDOS
+        // 6 - APELLIDOS
         {
             JLabel JLabel_Apellido = new JLabel("APELLIDOS: ");
             JLabel_Apellido.setFont(new Font("Arial", Font.BOLD, 14));
@@ -219,7 +210,7 @@ public class RegistroHuesped extends javax.swing.JFrame {
             txt_Apellido.setColumns(10);
         }
 
-        // 5 - FECHA DE NACIMINETO
+        // 7 - FECHA DE NACIMINETO
         {
             JLabel JLabel_ApellidoMa = new JLabel("FECHA DE NACIMIENTO: ");
             JLabel_ApellidoMa.setFont(new Font("Arial", Font.BOLD, 14));
@@ -234,7 +225,7 @@ public class RegistroHuesped extends javax.swing.JFrame {
 
         }
 
-        // 6 - NACIONALIDAD
+        // 8 - NACIONALIDAD
         {
             JLabel JLabel_Passsword = new JLabel("NACIONALIDAD: ");
             JLabel_Passsword.setFont(new Font("Arial", Font.BOLD, 14));
@@ -259,7 +250,7 @@ public class RegistroHuesped extends javax.swing.JFrame {
             contentPane.add(cmb_Nacionalidad);
         }
 
-        // 7 - TELEFONO
+        // 9 - TELEFONO
         {
             JLabel JLabel_Telefono = new JLabel("TELEFONO: ");
             JLabel_Telefono.setFont(new Font("Arial", Font.BOLD, 14));
@@ -280,7 +271,7 @@ public class RegistroHuesped extends javax.swing.JFrame {
             txt_Telefono.setColumns(10);
         }
 
-        // 8 - BOTON CERRAR ----------------------------
+        // 10 - BOTON CERRAR ----------------------------
         {
             JButton boton_salir = new JButton(" X ");
             boton_salir.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
@@ -303,7 +294,7 @@ public class RegistroHuesped extends javax.swing.JFrame {
             });
         }
 
-        // 9 - BOTON GUARDAR -----------------------------
+        // 11 - BOTON GUARDAR -----------------------------
         {
             JButton boton_login = new JButton("GUARDAR");
             boton_login.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -325,7 +316,7 @@ public class RegistroHuesped extends javax.swing.JFrame {
                     int mes1 = Calendario3.get(Calendar.MONTH);
                     int year1 = Calendario3.get(Calendar.YEAR);
 
-                    if (mes1 >= 0) {
+                    {
 
                         if (mes1 == 0) {
                             mes1 = 1;
@@ -400,18 +391,13 @@ public class RegistroHuesped extends javax.swing.JFrame {
                     }
 
                     String day1 = Integer.toString(dia1);
-                    System.out.println("dia ingreso string  " + day1);
-                    System.out.println("mes ingreso string  " + month1);
                     String Year1 = Integer.toString(year1);
-                    System.out.println("annio ingreso string " + Year1);
 
                     fecha_IN = (Year1 + "-" + month1 + "-" + day1);
-
                     reserva = ((year1 - 2000) + (mes1 + 1) + dia1 + Reserva_idUsuario + Reserva_idReserva);
-
                     nacion_cmb = cmb_Nacionalidad.getSelectedIndex() + 1;
 
-                    if (nacion_cmb != 0) {
+                    {
 
                         if (nacion_cmb == 1) {
                             pago_string = "Afganistán";
@@ -579,7 +565,6 @@ public class RegistroHuesped extends javax.swing.JFrame {
                         pst1.setInt(8, reserva);
                         System.out.println("VOY A REGISTRAR RESERVA");
 
-                        
                         pst1.setInt(9, Reserva_idUsuario);
 
                         pst1.executeUpdate();
